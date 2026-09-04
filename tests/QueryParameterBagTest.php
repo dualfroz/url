@@ -89,6 +89,21 @@ it('can be casted to a string', function () {
 });
 
 
+it('keeps valueless parameters when being casted to a string', function () {
+    $queryParameterBag = QueryParameterBag::fromString('offset');
+
+    expect($queryParameterBag)->has('offset')->toBeTrue();
+    expect($queryParameterBag)->__toString()->toEqual('offset=');
+});
+
+
+it('keeps valueless parameters alongside valued ones when being casted to a string', function () {
+    $queryParameterBag = QueryParameterBag::fromString('foo=&bar=baz');
+
+    expect($queryParameterBag)->__toString()->toEqual('foo=&bar=baz');
+});
+
+
 it('can be created from a string with url encoded values', function () {
     $queryParameterBag = QueryParameterBag::fromString(
         'category=storage%20furniture&discount=%3E40%25%20off&range%5B0%5D=10&range%5B1%5D=20'

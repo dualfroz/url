@@ -65,6 +65,10 @@ class QueryParameterBag implements \Stringable
 
     public function __toString(): string
     {
-        return http_build_query($this->parameters, '', '&', PHP_QUERY_RFC3986);
+        // Valueless parameters are stored as null, which http_build_query() skips;
+        // render them with an empty value so they survive.
+        $parameters = array_map(fn ($value) => $value ?? '', $this->parameters);
+
+        return http_build_query($parameters, '', '&', PHP_QUERY_RFC3986);
     }
 }
